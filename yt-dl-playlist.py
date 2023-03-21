@@ -42,9 +42,8 @@ if len(sys.argv) == 4 and sys.argv[3] == "audio":
 else:
     command = [
         "yt-dlp",
-        "--ignore-errors",
-        "--format",
-        "bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[height<=720][ext=mp4]",
+        "-f",
+        "'bv*[height<=720][ext=mp4]+ba[ext=m4a]'",
         "--merge-output-format",
         "mp4",
         "--output",
