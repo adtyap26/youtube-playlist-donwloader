@@ -11,7 +11,7 @@ if not os.path.exists("/usr/bin/yt-dlp"):
 
 # parse command line arguments
 if len(sys.argv) < 3:
-    print("Usage: youtube-dl-playlist <youtube_playlist_url> <destination_directory>")
+    print("Usage: youtube-dl-playlist <youtube_playlist_url> <destination_directory> [audio]")
     sys.exit(1)
 
 youtube_playlist_url = sys.argv[1]
@@ -23,19 +23,35 @@ if not os.path.exists(destination_directory):
     sys.exit(1)
 
 # download youtube playlist using yt-dlp
-command = [
-    "yt-dlp",
-    "--ignore-errors",
-    "--format",
-    "bestaudio",
-    "--extract-audio",
-    "--audio-format",
-    "mp3",
-    "--audio-quality",
-    "160K",
-    "--output",
-    '"%(title)s.%(ext)s"',
-    "--yes-playlist",
-    youtube_playlist_url,
-]
+if len(sys.argv) == 4 and sys.argv[3] == "audio":
+    command = [
+        "yt-dlp",
+        "--ignore-errors",
+        "--format",
+        "bestaudio",
+        "--extract-audio",
+        "--audio-format",
+        "mp3",
+        "--audio-quality",
+        "160K",
+        "--output",
+        '"%(title)s.%(ext)s"',
+        "--yes-playlist",
+        youtube_playlist_url,
+    ]
+else:
+    command = [
+        "yt-dlp",
+        "--ignore-errors",
+        "--format",
+        "bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[height<=720][ext=mp4]",
+        "--merge-output-format",
+        "mp4",
+        "--output",
+        '"%(title)s.%(ext)s"',
+        "--yes-playlist",
+        youtube_playlist_url,
+    ]
+
 subprocess.run(" ".join(command), shell=True)
+
